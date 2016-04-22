@@ -45,13 +45,34 @@ function loadSlidesFromGoogleDrive(onLoadComplete){
 }
 
 /**
+* Helper function for the front-end sorting of sections which should be displayed in reverse order
+* This is only a v1 work around, v2 should have parameter based sorting via the Web Services
+*/
+function reserveOrderForSection(category){
+    var handled;
+    var name = category.name;
+    if( name.includes("Meetings") || name.includes("Special") ){
+        handled = true
+        addMenItem(category.name)
+        var sectionId = createCategorySection(category)
+        for( var j = category.items.length-1; j >= 0; j-- ){
+            addThumbnailForSlide(sectionId, category.items[j])    
+        }     
+    } else {
+        handled = false
+    }
+    return handled
+}
+/**
 * Adds a single category ( essentially a folder from Google Drive ) to the DOM
 */
 function addCategory(category){
-    addMenItem(category.name)
-    var sectionId = createCategorySection(category)
-    for( var j = 0; j < category.items.length; j++ ){
-        addThumbnailForSlide(sectionId, category.items[j])    
+    if( reserveOrderForSection(category) == false ){
+        addMenItem(category.name)
+        var sectionId = createCategorySection(category)
+        for( var j = 0; j < category.items.length; j++ ){
+            addThumbnailForSlide(sectionId, category.items[j])    
+        }
     }
 }
 
