@@ -1,4 +1,4 @@
-var gLocalHost     = "http://localhost:8080/CommunityOutreachService/SlideService";  //For Local Development Purposes 
+var gLocalHost     = "http://localhost:8080/CommunityOutreachService/SlideService";  //For Local Development Purposes
 var gProductionURL = "http://fuzzdisplay-env.us-west-2.elasticbeanstalk.com/SlideService";
 var gBaseURL = gProductionURL;
 
@@ -10,7 +10,7 @@ function log(text){
 }
 
 /**
-* Http Get Request 
+* Http Get Request
 */
 function Get(url, successCallback, errorCallback){
     var xmlHttpRequest = new XMLHttpRequest();
@@ -21,7 +21,7 @@ function Get(url, successCallback, errorCallback){
         errorCallback(xmlHttpRequest.statusText)
     }
     xmlHttpRequest.open('GET', url);
-    xmlHttpRequest.send();  
+    xmlHttpRequest.send();
 }
 
 
@@ -32,16 +32,17 @@ function Get(url, successCallback, errorCallback){
 */
 function loadSlidesFromGoogleDrive(onLoadComplete){
      Get( gBaseURL, function(response){
+       log(response);
         for( var i = 0; i < response.length; i++ ){
             var category = response[i]
             if( category.items.length > 0 ){
-                addCategory(category)   
+                addCategory(category)
             }
         }
          onLoadComplete()
      }, function(responseText){
-        log(responseText)    
-     })   
+        log(responseText)
+     })
 }
 
 /**
@@ -56,8 +57,8 @@ function reserveOrderForSection(category){
         addMenItem(category.name)
         var sectionId = createCategorySection(category)
         for( var j = category.items.length-1; j >= 0; j-- ){
-            addThumbnailForSlide(sectionId, category.items[j])    
-        }     
+            addThumbnailForSlide(sectionId, category.items[j])
+        }
     } else {
         handled = false
     }
@@ -71,7 +72,7 @@ function addCategory(category){
         addMenItem(category.name)
         var sectionId = createCategorySection(category)
         for( var j = 0; j < category.items.length; j++ ){
-            addThumbnailForSlide(sectionId, category.items[j])    
+            addThumbnailForSlide(sectionId, category.items[j])
         }
     }
 }
@@ -92,7 +93,7 @@ function createCategorySection(category){
                           .append($('<div>').attr('class', 'container')
                                   .append( $('<div>').attr('class', 'row')
                                          .append( $('<div>').attr('class', 'col-lg-12')
-                                                .append($('<h2>').append(category.name))))                                  
+                                                .append($('<h2>').append(category.name))))
                          .append( $('<div>').attr('id','row-'+id).attr('class', 'row')
                                         ))
                          )
@@ -109,7 +110,7 @@ function addMenItem(name){
                 .attr('href','#'+ getIdFromName(name))
                 .append(name)
         )
-    ); 
+    );
 }
 
 /**
@@ -118,19 +119,36 @@ function addMenItem(name){
 function addThumbnailForSlide(rowId, item){
     $('#'+rowId)
         .append(
-            $('<div>').attr('class','col-md-4 col-sm-6 portfolio-item')
-                .append( $('<a>').attr('href', item.embedlink).attr('class', 'portfolio-link')
+            $('<div>').attr('class','col-md-4 col-sm-6')
+                .append( $('<a>').attr('class', 'portfolio-item').attr('href', item.embedlink).attr('target', '_blank')
+                .append( $('<span>').attr('class', 'portfolio-link')
         .append( $('<div>').attr('class', 'portfolio-hover')
         .append( $('<div>').attr('class', 'portfolio-hover-content')
-        .append( $('<i>').attr('class', 'fa fa-plus fa-3x'))))
+        .append( $('<i>').attr('class', 'fa fa-link fa-3x'))))
         .append( $('<img>').attr('src', item.thumbnail).attr('width','400px').attr('class', 'img-responsive')))
         .append( $('<div>').attr('class', 'portfolio-caption')
         .append( $('<h4>').append(item.name)
-        ))); 
+      ))));
 }
 
 $(function() {
     loadSlidesFromGoogleDrive(function(){
         $('#load-spinner').hide()
     })
+
+    /*
+      Glorious smooth scroll!
+    */
+    $('body').on('click', 'a[href*="#"]:not([href="#"])', function() {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top
+          }, 500);
+          return false;
+        }
+      }
+    });
 });
