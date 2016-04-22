@@ -30,12 +30,13 @@ function Get(url, successCallback, errorCallback){
 * in the android@fuzzproductions.com Public folder on Google Drives and adds
 * it to the DOM
 */
-function loadSlidesFromGoogleDrive(){
+function loadSlidesFromGoogleDrive(onLoadComplete){
      Get( gBaseURL, function(response){
         for( var i = 0; i < response.length; i++ ){
             var cateogry = response[i]
             addCategory(cateogry)       
         }
+         onLoadComplete()
      }, function(responseText){
         log(responseText)    
      })   
@@ -106,5 +107,7 @@ function addThumbnailForSlide(rowId, item){
 }
 
 $(function() {
-    loadSlidesFromGoogleDrive()
+    loadSlidesFromGoogleDrive(function(){
+        $('#load-spinner').hide()
+    })
 });
