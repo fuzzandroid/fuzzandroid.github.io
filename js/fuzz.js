@@ -33,8 +33,10 @@ function Get(url, successCallback, errorCallback){
 function loadSlidesFromGoogleDrive(onLoadComplete){
      Get( gBaseURL, function(response){
         for( var i = 0; i < response.length; i++ ){
-            var cateogry = response[i]
-            addCategory(cateogry)       
+            var category = response[i]
+            if( category.items.length > 0 ){
+                addCategory(category)   
+            }
         }
          onLoadComplete()
      }, function(responseText){
