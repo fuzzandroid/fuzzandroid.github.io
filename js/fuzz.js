@@ -70,7 +70,7 @@ function createCategorySection(category){
     $("#page-top").append( $('<section>').attr('id', id).attr('class', 'card bg-light-gray')
                           .append($('<div>').attr('class', 'container')
                                   .append( $('<div>').attr('class', 'row')
-                                         .append( $('<div>').attr('class', 'col-lg-12 text-center')
+                                         .append( $('<div>').attr('class', 'col-lg-12')
                                                 .append($('<h2>').append(category.name))))                                  
                          .append( $('<div>').attr('id','row-'+id).attr('class', 'row')
                                         ))
