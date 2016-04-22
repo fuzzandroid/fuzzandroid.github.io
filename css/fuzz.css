@@ -36,3 +36,13 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.swimlane,
+section.swimlane {
+    padding: 25px;
+}
+
+section.swimlane:first-of-type {
+    padding-top: 75px;
+    padding-bottom: 50px;
+}
