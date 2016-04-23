@@ -15,6 +15,7 @@ function log(text){
  * Http Get Request
  */
 function Get(url, successCallback, errorCallback){
+    log(url)
     var xmlHttpRequest = new XMLHttpRequest();
     xmlHttpRequest.onload = function(){
         successCallback(JSON.parse(xmlHttpRequest.response))
@@ -33,18 +34,25 @@ function Get(url, successCallback, errorCallback){
  * it to the DOM
  */
 function loadSlidesFromGoogleDrive(onLoadComplete){
-     Get( gBaseURL, function(response){
-       log(response);
-        for( var i = 0; i < response.length; i++ ){
-            var category = response[i]
-            if( category.items.length > 0 ){
-                addCategory(category)
-            }
+    var parameters = window.location.href.split("?")[1]
+    var url;
+    if( parameters ){
+        url = gBaseURL + '?' + parameters
+    } else {
+        url = gBaseURL
+    }
+    Get( url, function(response){
+    log(response);
+    for( var i = 0; i < response.length; i++ ){
+        var category = response[i]
+        if( category.items.length > 0 ){
+            addCategory(category)
         }
-         onLoadComplete()
-     }, function(responseText){
-        log(responseText)
-     })
+    }
+     onLoadComplete()
+    }, function(responseText){
+    log(responseText)
+    })
 }
 
 /**
@@ -135,11 +143,17 @@ function addThumbnailForSlide(rowId, item){
 }
 
 
+/**
+ * Sends Google Analytics events to track slide engagments
+ */
 function onSlideClicked(event){
     var label = event.currentTarget.getAttribute('label')
     ga('send', 'event', 'Community Outreach', 'Slide Clicked', label);
 }
 
+/**
+ * Standard Google Analytics setup
+ */
 function initializeGoogleAnalytics(){
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -150,6 +164,9 @@ function initializeGoogleAnalytics(){
     ga('send', 'pageview');
 }
     
+/**
+ * Initialization Method ( Triggered by JQuery on page load )
+ */
 $(function() {
     
     initializeGoogleAnalytics()
