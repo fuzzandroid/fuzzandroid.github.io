@@ -27,6 +27,10 @@ function Get(url, successCallback, errorCallback){
     xmlHttpRequest.send();
 }
 
+function contains(stringToCheck, substring){
+    return stringToCheck.indexOf(substring) > -1
+}
+
 
 /**
  * Uses the Fuzz SlideService to retrieve a JSON representation of the slides
@@ -62,7 +66,7 @@ function loadSlidesFromGoogleDrive(onLoadComplete){
 function reserveOrderForSection(category){
     var handled;
     var name = category.name;
-    if( name.includes("Meetings") || name.includes("Special") ){
+    if( contains(name, "Meetings") || contains(name, "Special") ){
         handled = true
         addMenItem(category.name)
         var sectionId = createCategorySection(category)
