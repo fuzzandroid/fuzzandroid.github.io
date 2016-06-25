@@ -1,5 +1,5 @@
 var gLocalHost     = "http://localhost:8080/CommunityOutreachService/SlideService";  //For Local Development Purposes
-var gProductionURL = "http://fuzzdisplay-env.us-west-2.elasticbeanstalk.com/SlideService";
+var gProductionURL = "http://slides-service-env.us-west-2.elasticbeanstalk.com/SlideService";
 var gBaseURL = gProductionURL;
 
 var gGATrackingID = "UA-68302806-1";
